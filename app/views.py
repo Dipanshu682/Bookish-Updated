@@ -84,7 +84,7 @@ class BuyNowView(LoginRequiredMixin, View):
         return redirect('book-list')
     
 
-class CartAddView(View):
+class CartAddView(LoginRequiredMixin, View):
     def post(self, request, pk):
         book = get_object_or_404(Book, pk=pk)
 
@@ -104,7 +104,7 @@ class CartAddView(View):
         return redirect('cart')
     
 
-class CartDecreaseView(View):
+class CartDecreaseView(LoginRequiredMixin, View):
     def post(self, request, pk):
         cart_item = get_object_or_404(CartItem, pk=pk, user=request.user)
         if cart_item.quantity > 1:
@@ -115,7 +115,7 @@ class CartDecreaseView(View):
         return redirect('cart')
 
 
-class CartView(TemplateView):
+class CartView(LoginRequiredMixin, TemplateView):
     template_name = 'book/cart.html'
 
     def get_context_data(self, **kwargs):
