@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="display: flex; gap: 40px; align-items: flex-start; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+  
+  <!-- Left: Book Image -->
+  <div style="flex: 1; text-align: center;">
+    <img src="{{ book.image.url }}" alt="{{ book.title }}" style="width: 300px; height: 400px; object-fit: cover; border: 1px solid #ccc; border-radius: 8px;">
+  </div>
+
+  <!-- Right: Book Info -->
+  <div style="flex: 2;">
+    <h1 style="margin-top: 0;">{{ book.title }}</h1>
+
+    {% if request.user == book.seller %}
+      <a href="{% url 'book-update' book.pk %}" style="padding: 6px 10px; background-color: #007bff; color: white; border-radius: 4px; text-decoration: none;">✏️ Edit</a>
+      <a href="{% url 'book-delete' book.pk %}" style="padding: 6px 10px; background-color: red; color: white; border-radius: 4px; text-decoration: none;">🗑️ Delete</a>
+    {% else %}
+      <!-- Buy Now & Add to Cart for other users -->
+      <a href="{% url 'buy-now' book.pk %}" style="padding: 8px 12px; background-color: green; color: white; text-decoration: none;">Buy Now</a>
+
+      <form method="post" action="{% url 'cart-add' book.pk %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="padding: 8px 12px; background-color: orange; color: white; text-decoration: none;">Add to Cart</button>
+      </form>
+    {% endif %}
+
+    <p><strong>Price:</strong> ₹{{ book.price }}</p>
+    <p><strong>Category:</strong> {{ book.category.name }}</p>
+    <p><strong>Seller:</strong> {{ book.seller.username }}</p>
+    <p><strong>Condition:</strong> {{ book.condition }}</p>
+    <p><strong>Status:</strong> {{ book.status }}</p>
+    <p><strong>Quantity:</strong> {{ book.quantity }}</p>
+    <p><strong>Published on:</strong> {{ book.created_at|date:"M d, Y" }}</p>
+  </div>
+
+</div>
+
+<!-- Description -->
+<div style="margin-top: 40px; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+  <h2>Description</h2>
+  <div>{{ book.description|safe }}</div>
+</div>
+
+<!-- Back link -->
+<div style="margin-top: 20px;">
+  <a href="{% url 'book-list' %}">← Back to All Books</a>
+</div>
+{% endblock %}

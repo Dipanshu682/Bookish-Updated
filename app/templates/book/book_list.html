@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>All Books</h1>
+
+<div style="display: flex; flex-direction: column; gap: 20px;">
+  {% for book in books %}
+    <div style="display: flex; border: 1px solid #ccc; padding: 10px; align-items: center;">
+      <!-- Book Image (Left side) -->
+      <div style="flex-shrink: 0;">
+        <img src="{{ book.image.url }}" alt="{{ book.title }}" style="width: 150px; height: 200px; object-fit: cover;">
+      </div>
+
+      <!-- Book Details (Right side) -->
+      <div style="margin-left: 20px;">
+        <h2 style="margin: 0 0 10px 0;">{{ book.title }}</h2>
+        <p style="margin: 0 0 10px 0;"><strong>Price:</strong> ₹{{ book.price }}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Seller:</strong> {{ book.seller.username }}</p>
+        <p style="margin: 0 0 10px 0;"><strong>Date:</strong> {{ book.created_at|date:"M d, Y" }}</p>
+        {% comment %} <p style="margin: 10px 0;">{{ book.description|truncatewords:30 }}</p> {% endcomment %}
+        <a href="{% url 'book-detail' book.pk %}">View Details</a>
+      </div>
+    </div>
+  {% empty %}
+    <p>No books found.</p>
+  {% endfor %}
+
+<!-- Pagination -->
+{% if is_paginated %}
+    <div>
+        {% if page_obj.has_previous %}
+            <a href="?q={{ request.GET.q }}&page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?q={{ request.GET.q }}&page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+{% endif %}
+
+</div>
+
+{% endblock %}

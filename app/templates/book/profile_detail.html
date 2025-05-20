@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Profile 👤</h2>
+<p><strong>Username:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Bio:</strong> {{ user.profile.bio }}</p>
+<p><strong>Location:</strong> {{ user.profile.location }}</p>
+<a href="{% url 'profile-update' %}">Edit Profile</a>
+
+<!-- Back link -->
+<div style="margin-top: 20px;">
+    <a href="{% url 'book-list' %}">← Back to All Books</a>
+</div>
+
+{% endblock %}

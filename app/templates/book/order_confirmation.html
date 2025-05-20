@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div style="max-width: 800px; margin: 0 auto; padding: 40px; text-align: center;">
+    <h1 style="color: green; font-size: 32px;">Order Confirmed ✅</h1>
+    <p style="font-size: 18px; margin-top: 10px;">Thank you for your purchase, {{ user.username }}!</p>
+    <p style="font-size: 16px;">Your order has been placed successfully.</p>
+    <a href="{% url 'book-list' %}" style="margin-top: 20px; display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Continue Shopping</a>
+  </div>
+{% endblock %}

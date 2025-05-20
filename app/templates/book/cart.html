@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load cart_extras %}
+{% block content %}
+  <div style="max-width: 1000px; margin: 0 auto; padding: 40px;">
+    <h1>Your Cart 🛒</h1>
+
+    {% if cart_items %}
+      <table style="width: 100%; border-collapse: collapse; margin-top: 30px;">
+        <thead>
+          <tr style="background-color: #f0f0f0;">
+            <th style="padding: 12px; text-align: left;">Book</th>
+            <th style="padding: 12px; text-align: left;">Price</th>
+            <th style="padding: 12px; text-align: center;">Quantity</th>
+            <th style="padding: 12px; text-align: left;">Total</th>
+            <th style="padding: 12px; text-align: center;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart_items %}
+            <tr style="border-bottom: 1px solid #ddd;">
+              <td style="padding: 12px;">
+                <strong>{{ item.book.title }}</strong><br>
+                <small>Seller: {{ item.book.seller.username }}</small>
+              </td>
+
+              <td style="padding: 12px;">₹{{ item.book.price }}</td>
+
+              <td style="padding: 12px; text-align: center;">
+                <div style="display: flex; justify-content: center; align-items: center; gap: 8px;">
+                  <form action="{% url 'cart-decrease' item.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" style="padding: 4px 10px;">-</button>
+                  </form>
+
+                  {{ item.quantity }}
+
+                  <form action="{% url 'cart-add' item.book.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" style="padding: 4px 10px;" {% if item.quantity >= item.book.quantity %}disabled{% endif %}>+</button>
+                  </form>
+                </div>
+              </td>
+
+              <td style="padding: 12px;">₹{{ item.quantity|multiply:item.book.price }}</td>
+
+              <td style="padding: 12px; text-align: center;">
+                <form action="{% url 'remove-from-cart' item.pk %}" method="post">
+                  {% csrf_token %}
+                  <button type="submit" style="background-color: red; color: white; padding: 6px 12px; border: none; border-radius: 4px;">Remove</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div style="margin-top: 30px; text-align: right;">
+        <h3>Total: ₹{{ cart_total }}</h3>
+        <form method="post" action="{% url 'checkout' %}">
+          {% csrf_token %}
+          <button type="submit" style="background-color: green; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Buy Now</button>
+        </form>
+      </div>
+    {% else %}
+      <p>Your cart is empty.</p>
+      <a href="{% url 'book-list' %}" style="color: #007bff;">Browse Books</a>
+    {% endif %}
+  </div>
+{% endblock %}

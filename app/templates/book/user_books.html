@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Listed Books 📚</h2>
+<ul>
+  {% for book in books %}
+    <li>
+      <a href="{% url 'book-detail' book.pk %}">{{ book.title }}</a> - ₹{{ book.price }}
+    </li>
+  {% empty %}
+    <p>You haven’t listed any books yet.</p>
+  {% endfor %}
+</ul>
+{% endblock %}
