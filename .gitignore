@@ -15,8 +15,8 @@ bookish/
 db.sqlite3
 
 # Static and media files (optional during development)
-static/
-media/
+# static/
+# media/
 
 # VSCode and other IDEs
 .vscode/
